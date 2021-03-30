@@ -8,3 +8,5 @@ In the main method, there's 3 establishments I have hard-coded. This definitely 
 
 Another thing that is placeholder are the toString() formatting for each class. It looks clunky and very hard to read, I will be changing that for the next stage.
 There's also some comments along the way with the code. The whole class structure could be a little bit better, but overall, I like how it's all turning out so far.
+
+I haven't extensively tested it, because I've basically speedcoded it in a day, I hope there won't be any surprises. But if there are, let me know, I'd appreciate it!
