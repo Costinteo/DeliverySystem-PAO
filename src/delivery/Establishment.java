@@ -44,9 +44,8 @@ public abstract class Establishment {
 
     @Override
     public String toString() {
-        return "Establishment{" +
-                "name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                '}';
+        return "Establishment " +
+                "name=" + name + ", " +
+                "address=" + address + "\n";
     }
 }

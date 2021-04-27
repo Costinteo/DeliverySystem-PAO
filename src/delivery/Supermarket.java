@@ -70,9 +70,15 @@ public class Supermarket extends Establishment {
 
     @Override
     public String toString() {
-        return super.toString() + "Supermarket{" +
-                "foodList=" + Arrays.toString(foodList.toArray()) +
-                ", clothingList=" + Arrays.toString(clothingList.toArray()) +
-                '}';
+        String food = "";
+        String clothing = "";
+        for (Food f : foodList) {
+            food += f.toString();
+        }
+        for (Clothing c : clothingList) {
+            clothing += c.toString();
+        }
+        return super.toString() + "foodList=[\n" + food + "]\n" +
+                "clothingList=[\n" + clothing + "]\n";
     }
 }

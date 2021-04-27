@@ -75,10 +75,9 @@ public class Clothing extends Product {
 
     @Override
     public String toString() {
-        return super.toString() + "Clothing{" +
-                "material='" + material + '\'' +
-                ", size='" + size + '\'' +
-                ", gender='" + gender + '\'' +
-                "} ";
+        return super.toString() +
+                ", material=" + material +
+                ", size=" + size +
+                ", gender=" + gender + "\n";
     }
 }

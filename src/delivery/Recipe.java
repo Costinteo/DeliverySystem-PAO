@@ -39,8 +39,7 @@ public class Recipe extends Product {
 
     @Override
     public String toString() {
-        return super.toString() + "Recipe{" +
-                "ingredients=" + Arrays.toString(ingredients) +
-                '}';
+        return super.toString() +
+                ", ingredients=" + Arrays.toString(ingredients) + "\n";
     }
 }

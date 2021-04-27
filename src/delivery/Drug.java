@@ -81,10 +81,9 @@ public class Drug extends Product implements Comparable<Drug> {
 
     @Override
     public String toString() {
-        return super.toString() + "Drug{" +
-                "activeSubstance='" + activeSubstance + '\'' +
-                ", primaryUse='" + primaryUse + '\'' +
-                ", isOTC=" + isOTC +
-                '}';
+        return super.toString() +
+                ", activeSubstance=" + activeSubstance  +
+                ", primaryUse=" + primaryUse +
+                ", isOTC=" + isOTC + "\n";
     }
 }

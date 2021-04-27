@@ -104,12 +104,11 @@ public class Food extends Product {
 
     @Override
     public String toString() {
-        return super.toString() + "Food{" +
-                "expirationDate='" + expirationDate + '\'' +
+        return super.toString() +
+                ", expirationDate=" + expirationDate +
                 ", kcal=" + kcal +
                 ", carbs=" + carbs +
                 ", fiber=" + fiber +
-                ", protein=" + protein +
-                '}';
+                ", protein=" + protein + "\n";
     }
 }

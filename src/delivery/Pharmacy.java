@@ -42,7 +42,11 @@ public class Pharmacy extends Establishment {
 
     @Override
     public String toString() {
+        String products = "";
+        for (Drug d : availableProducts) {
+            products += d.toString();
+        }
         return super.toString() +
-                "availableProducts=" + availableProducts + "\n";
+                "availableProducts= [\n" + products + "]\n";
     }
 }

@@ -44,8 +44,10 @@ public class Restaurant extends Establishment{
 
     @Override
     public String toString() {
-        return super.toString() + "Restaurant{" +
-                "recipeList=" + Arrays.toString(recipeList.toArray()) +
-                '}';
+        String recipe = "";
+        for (Recipe rec : recipeList) {
+            recipe += rec.toString();
+        }
+        return super.toString() + "recipeList=[\n" + recipe + "]\n";
     }
 }
