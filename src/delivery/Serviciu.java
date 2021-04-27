@@ -154,7 +154,7 @@ public class Serviciu {
         }
     }
 
-    // method used to populate the arrays in Establishment objects (without Delivery Companies)
+    // method used to populate delivery companies with drivers
     public static void populateWithDrivers(HashMap<String, DeliveryCompany> dc) {
 
         try {
@@ -294,6 +294,7 @@ public class Serviciu {
     public static void sendOrder(DeliveryCompany dc, User u) {
         u.sendOrder(dc);
         System.out.print("Order sent!\n");
+        dc.deliverOrder();
     }
 
     public static void showMenu(DeliveryCompany dc) {
