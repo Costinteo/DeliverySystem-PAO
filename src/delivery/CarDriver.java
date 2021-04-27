@@ -1,5 +1,8 @@
 package delivery;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+
 public class CarDriver extends Driver {
     private String carCompany;
     private String carYear;
@@ -123,5 +126,25 @@ public class CarDriver extends Driver {
 
     public void setCarID(String carID) {
         this.carID = carID;
+    }
+
+    @Override
+    public void readFromFile(BufferedReader br) {
+        try {
+            String line = br.readLine();
+            String[] carDriverData = line.split(",");
+            this.setName(carDriverData[0]);
+            this.setAge(Integer.parseInt(carDriverData[1]));
+            this.setRating(Double.parseDouble(carDriverData[2]));
+            this.setTimesRated(Integer.parseInt(carDriverData[3]));
+            String[] carInfo = line.split("\\s");
+            this.carCompany = carInfo[0];
+            this.carYear = carInfo[1];
+            this.carColour = carInfo[2];
+            this.carID = carInfo[3];
+
+        } catch (IOException e) {
+            System.out.print(e);
+        }
     }
 }

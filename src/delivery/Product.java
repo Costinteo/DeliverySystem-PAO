@@ -1,5 +1,7 @@
 package delivery;
 
+import java.io.BufferedReader;
+
 public abstract class Product {
     private String name;
     private double price;
@@ -27,6 +29,8 @@ public abstract class Product {
         return price;
     }
 
+    public void setPrice(Double p) {this.price = p;}
+
     public void setName(String name) {
         this.name = name;
     }
@@ -38,6 +42,8 @@ public abstract class Product {
     public void setProducer(String producer) {
         this.producer = producer;
     }
+
+    public abstract void readFromFile(BufferedReader br);
 
     @Override
     public String toString() {

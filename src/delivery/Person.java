@@ -1,5 +1,7 @@
 package delivery;
 
+import java.io.BufferedReader;
+
 public abstract class Person {
     private String name;
     private int age;
@@ -31,4 +33,6 @@ public abstract class Person {
     public void setAge(int x) {
         this.age = x;
     }
+
+    public abstract void readFromFile(BufferedReader br);
 }

@@ -1,5 +1,7 @@
 package delivery;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -55,6 +57,7 @@ public class User extends Person {
     }
 
     public void addToCart(Product p) {
+        System.out.print(p);
         itemList.add(p);
     }
 
@@ -105,6 +108,22 @@ public class User extends Person {
                 ", password='" + password + '\'' +
                 ", itemList=" + Arrays.toString(itemList.toArray()) +
                 '}';
+    }
+
+    @Override
+    public void readFromFile(BufferedReader br) {
+        try {
+            String line = br.readLine();
+            String[] userData = line.split(",");
+            this.setName(userData[0]);
+            this.setAge(Integer.parseInt(userData[1]));
+            this.address = userData[2];
+            this.username = userData[3];
+            this.password = userData[4];
+
+        } catch (IOException e) {
+            System.out.print(e);
+        }
     }
 
     public void sendOrder(DeliveryCompany dc) {

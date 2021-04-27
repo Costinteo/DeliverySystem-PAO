@@ -1,5 +1,9 @@
 package delivery;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.Arrays;
+
 import static java.lang.Double.parseDouble;
 
 public class Food extends Product {
@@ -76,6 +80,26 @@ public class Food extends Product {
 
     public void setProtein(double protein) {
         this.protein = protein;
+    }
+
+    @Override
+    public void readFromFile(BufferedReader br) {
+        try {
+            String line = br.readLine();
+            String[] foodData = line.split(",");
+            this.setName(foodData[0]);
+            this.setPrice(Double.parseDouble(foodData[1]));
+            this.setProducer(foodData[2]);
+            this.expirationDate = foodData[3];
+            String[] parsedInfo = foodData[4].split("\\s");
+            this.kcal = parseDouble(parsedInfo[0]);
+            this.carbs = parseDouble(parsedInfo[1]);
+            this.fiber = parseDouble(parsedInfo[2]);
+            this.protein = parseDouble(parsedInfo[3]);
+
+        } catch (IOException e) {
+            System.out.print(e);
+        }
     }
 
     @Override

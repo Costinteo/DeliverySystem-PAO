@@ -1,6 +1,9 @@
 package delivery;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
 
 public class DeliveryCompany extends Establishment {
@@ -105,6 +108,16 @@ public class DeliveryCompany extends Establishment {
         orderList.add(o);
     }
 
+    public void readDriversFromFile(BufferedReader br) {
+        try {
+            String line = br.readLine();
+            String[] driverData = line.split(",");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     // to deliver order, we simply remove the items ordered from the corresponding establishments
     public void deliverOrder() {
         if (orderList.size() > 0) {
@@ -144,4 +157,13 @@ public class DeliveryCompany extends Establishment {
         }
     }
 
+    @Override
+    public String toString() {
+        return "DeliveryCompany{" +
+                "establishmentList=" + Arrays.toString(establishmentList.toArray()) +
+                ", driverList=" + driverList +
+                ", userList=" + userList +
+                ", orderList=" + orderList +
+                '}';
+    }
 }

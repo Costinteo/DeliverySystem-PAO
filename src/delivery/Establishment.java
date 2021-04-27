@@ -1,5 +1,9 @@
 package delivery;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 public abstract class Establishment {
     private String name;
     private String address;
@@ -25,6 +29,17 @@ public abstract class Establishment {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public void readFromFile(BufferedReader br) {
+        try {
+            String line = br.readLine();
+            String[] establishmentData = line.split(",");
+            this.name = establishmentData[0];
+            this.address = establishmentData[1];
+        } catch(IOException e) {
+            System.out.print(e);
+        }
     }
 
     @Override

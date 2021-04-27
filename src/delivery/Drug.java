@@ -1,5 +1,10 @@
 package delivery;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+
+import static java.lang.Double.parseDouble;
+
 public class Drug extends Product implements Comparable<Drug> {
     private String activeSubstance;
     private String primaryUse;
@@ -45,6 +50,23 @@ public class Drug extends Product implements Comparable<Drug> {
 
     public void setOTC(boolean OTC) {
         isOTC = OTC;
+    }
+
+    @Override
+    public void readFromFile(BufferedReader br) {
+        try {
+            String line = br.readLine();
+            String[] drugData = line.split(",");
+            this.setName(drugData[0]);
+            this.setPrice(Double.parseDouble(drugData[1]));
+            this.setProducer(drugData[2]);
+            this.activeSubstance = drugData[3];
+            this.primaryUse = drugData[4];
+            this.isOTC = Boolean.parseBoolean(drugData[5]);
+
+        } catch (IOException e) {
+            System.out.print(e);
+        }
     }
 
     @Override

@@ -1,5 +1,8 @@
 package delivery;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+
 public class Clothing extends Product {
     private String material;
     private String size;
@@ -50,6 +53,24 @@ public class Clothing extends Product {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    @Override
+    public void readFromFile(BufferedReader br) {
+        try {
+            String line = br.readLine();
+            String[] clothingData = line.split(",");
+            this.setName(clothingData[0]);
+            this.setPrice(Double.parseDouble(clothingData[1]));
+            this.setProducer(clothingData[2]);
+            String[] clothingExtraInfo = clothingData[3].split("\\s");
+            this.material = clothingExtraInfo[0];
+            this.size = clothingExtraInfo[1];
+            this.gender = clothingExtraInfo[2];
+
+        } catch (IOException e) {
+            System.out.print(e);
+        }
     }
 
     @Override

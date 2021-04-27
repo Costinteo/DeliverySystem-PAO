@@ -11,6 +11,7 @@ public class Order {
     Order(User u) {
         this.user = u.getName();
         this.address = u.getAddress();
+        this.itemList = new ArrayList<Product>();
         this.itemList.addAll(u.getItemList());
         double totalPrice = 0;
         for (Product p : itemList) {

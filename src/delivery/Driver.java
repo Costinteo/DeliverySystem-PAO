@@ -1,5 +1,7 @@
 package delivery;
 
+import java.io.BufferedReader;
+
 public abstract class Driver extends Person {
     private double rating;
     private int timesRated;
@@ -40,4 +42,6 @@ public abstract class Driver extends Person {
         this.rating = (this.rating * this.timesRated + rating) / (this.timesRated + 1);
         this.timesRated++;
     }
+
+    public abstract void readFromFile(BufferedReader br);
 }

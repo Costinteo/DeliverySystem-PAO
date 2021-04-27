@@ -1,9 +1,190 @@
 package delivery;
 
-import java.util.Locale;
+import utility.Pair;
+
+import java.io.*;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
+import java.io.FileWriter;
 
 public class Serviciu {
+
+    public static void logAction(String action) {
+        long millis = System.currentTimeMillis();
+        java.util.Date timestamp = new java.util.Date(millis);
+        try {
+            FileWriter fw = new FileWriter("log.csv", true);
+            fw.write(action + "," + timestamp + "\n");
+            fw.close();
+        }
+        catch (IOException e) {
+            System.out.print(e);
+        }
+    }
+
+    // overloaded logAction if you wish to log in another file than the default "log.csv"
+    public static void logAction(String action, String filename) {
+        long millis = System.currentTimeMillis();
+        java.util.Date timestamp = new java.util.Date(millis);
+        try {
+            FileWriter fw = new FileWriter(filename, true);
+            fw.write(action + "," + timestamp + "\n");
+            fw.close();
+        }
+        catch (IOException e) {
+            System.out.print(e);
+        }
+    }
+
+    public static void readEstablishment(BufferedReader br, Establishment e) {
+        e.readFromFile(br);
+    }
+
+    public static void readPerson(BufferedReader br, Person p) {
+        p.readFromFile(br);
+    }
+
+    public static void readProduct(BufferedReader br, Product p) {
+        p.readFromFile(br);
+    }
+
+    public static void readDeliveryCompany(BufferedReader br, DeliveryCompany dc) {
+        dc.readFromFile(br);
+    }
+
+    // method to read all establishments (including Delivery Companies)
+    public static void readAllEstablishments(HashMap<String, DeliveryCompany> dm, HashMap<String, Establishment> em) {
+        try {
+            File deliveryFile = new File("delivery.csv");
+            File restaurantFile = new File("restaurant.csv");
+            File supermarketFile = new File("supermarket.csv");
+            File pharmacyFile = new File("pharmacy.csv");
+
+            ArrayList<Pair<File, BufferedReader>> fileArray = new ArrayList<>();
+
+            BufferedReader deliveryCompanyReader = new BufferedReader(new FileReader(deliveryFile));
+            BufferedReader restaurantReader = new BufferedReader(new FileReader(restaurantFile));
+            BufferedReader supermarketReader = new BufferedReader(new FileReader(supermarketFile));
+            BufferedReader pharmacyReader = new BufferedReader(new FileReader(pharmacyFile));
+
+            fileArray.add(new Pair<File, BufferedReader>(restaurantFile, restaurantReader));
+            fileArray.add(new Pair<File, BufferedReader>(supermarketFile, supermarketReader));
+            fileArray.add(new Pair<File, BufferedReader>(pharmacyFile, pharmacyReader));
+
+            for (int i = 0; i < Files.lines(deliveryFile.toPath()).count(); i++) {
+                DeliveryCompany dc = new DeliveryCompany("default", "default");
+                dc.readFromFile(deliveryCompanyReader);
+                dm.put(dc.getName(), dc);
+            }
+
+            for (int i = 0; i < fileArray.size(); i++) {
+                for (int j = 0; j < Files.lines(fileArray.get(i).first.toPath()).count(); j++) {
+                    Establishment e;
+                    switch (fileArray.get(i).first.getName()) {
+                        case "restaurant.csv" -> e = new Restaurant("default", "default");
+                        case "supermarket.csv" -> e = new Supermarket("default", "default");
+                        case "pharmacy.csv" -> e = new Pharmacy("default", "default");
+                        default -> throw new Exception("Unknown file detected!");
+                    }
+                    e.readFromFile(fileArray.get(i).second);
+                    em.put(e.getName(), e);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // method used to populate the arrays in Establishment objects (without Delivery Companies)
+    public static void populateEstablishmentsWithProducts(HashMap<String, Establishment> em) {
+
+        try {
+            File clothingFile = new File("clothing.csv");
+            File drugFile = new File("drug.csv");
+            File foodFile = new File("food.csv");
+            File recipeFile = new File("recipe.csv");
+
+            ArrayList<Pair<File, BufferedReader>> fileArray = new ArrayList<>();
+
+            BufferedReader clothingReader = new BufferedReader(new FileReader(clothingFile));
+            BufferedReader drugReader = new BufferedReader(new FileReader(drugFile));
+            BufferedReader foodReader = new BufferedReader(new FileReader(foodFile));
+            BufferedReader recipeReader = new BufferedReader(new FileReader(recipeFile));
+
+            fileArray.add(new Pair<File, BufferedReader>(clothingFile, clothingReader));
+            fileArray.add(new Pair<File, BufferedReader>(drugFile, drugReader));
+            fileArray.add(new Pair<File, BufferedReader>(foodFile, foodReader));
+            fileArray.add(new Pair<File, BufferedReader>(recipeFile, recipeReader));
+
+            for (int i = 0; i < fileArray.size(); i++) {
+                for (int j = 0; j < Files.lines(fileArray.get(i).first.toPath()).count(); j++) {
+                    Product p;
+                    switch (fileArray.get(i).first.getName()) {
+                        case "clothing.csv" -> p = new Clothing();
+                        case "drug.csv" -> p = new Drug();
+                        case "food.csv" -> p = new Food();
+                        case "recipe.csv" -> p = new Recipe();
+                        default -> throw new Exception("Unknown file detected!");
+                    }
+                    p.readFromFile(fileArray.get(i).second);
+                    String eType = em.get(p.getProducer()).getType();
+
+                    // again with the same problem: I don't have an abstract add / remove method
+                    // could definitely improve this but right now I'm too lazy to replace everything
+                    switch(eType) {
+                        case "Restaurant" -> ((Restaurant)em.get(p.getProducer())).addRecipe((Recipe)p);
+                        case "Supermarket" -> {
+                            String pType = p.getType();
+                            Supermarket s = (Supermarket) em.get(p.getProducer());
+                            switch (pType) {
+                                case "Clothing" -> s.addClothing((Clothing) p);
+                                case "Food" -> s.addFood((Food) p);
+                            }
+                        }
+                        case "Pharmacy" -> ((Pharmacy)em.get(p.getProducer())).addProduct((Drug)p);
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // method used to populate the arrays in Establishment objects (without Delivery Companies)
+    public static void populateWithDrivers(HashMap<String, DeliveryCompany> dc) {
+
+        try {
+            File carFile = new File("cardriver.csv");
+            File bikeFile = new File("biker.csv");
+
+            ArrayList<Pair<File, BufferedReader>> fileArray = new ArrayList<>();
+
+            BufferedReader carReader = new BufferedReader(new FileReader(carFile));
+            BufferedReader bikeReader = new BufferedReader(new FileReader(bikeFile));
+
+            fileArray.add(new Pair<File, BufferedReader>(carFile, carReader));
+            fileArray.add(new Pair<File, BufferedReader>(bikeFile, bikeReader));
+
+            for (int i = 0; i < fileArray.size(); i++) {
+                for (int j = 0; j < Files.lines(fileArray.get(i).first.toPath()).count(); j++) {
+                    Driver d;
+                    switch (fileArray.get(i).first.getName()) {
+                        case "cardriver.csv" -> d = new CarDriver("default", 0, 0, 0, "default");
+                        case "biker.csv" -> d = new Biker("default", 0, 0, 0, "default");
+                        default -> throw new Exception("Unknown file detected!");
+                    }
+                    d.readFromFile(fileArray.get(i).second);
+                    dc.forEach((key, value) -> value.addDriver(d));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void registerUser(DeliveryCompany dc, User u) {
         System.out.print("Name: ");
@@ -128,8 +309,14 @@ public class Serviciu {
             String act = fin.nextLine();
             act = act.toLowerCase();
             switch (act) {
-                case "sign in" -> signUser(dc, u);
-                case "register" -> registerUser(dc, u);
+                case "sign in" -> {
+                    signUser(dc, u);
+                    logAction(act);
+                }
+                case "register" -> {
+                    registerUser(dc, u);
+                    logAction(act);
+                }
                 default -> System.out.print("\nInvalid action! Please check spelling.\n");
             }
         }
@@ -148,13 +335,34 @@ public class Serviciu {
             String act = fin.nextLine();
             act = act.toLowerCase();
             switch (act) {
-                case "search product" -> searchProduct(dc);
-                case "view establishments" -> viewEstablishments(dc);
-                case "view establishment stock" -> viewEstablishmentStock(dc);
-                case "add product to cart" -> addProduct(dc, u);
-                case "remove product from cart" -> removeProduct(dc, u);
-                case "view cart" -> viewCart(dc, u);
-                case "send order" -> sendOrder(dc, u); // send order doesn't really do anything except for send the order and save it for the respective delivery company
+                case "search product" -> {
+                    searchProduct(dc);
+                    logAction(act);
+                }
+                case "view establishments" -> {
+                    viewEstablishments(dc);
+                    logAction(act);
+                }
+                case "view establishment stock" -> {
+                    viewEstablishmentStock(dc);
+                    logAction(act);
+                }
+                case "add product to cart" -> {
+                    addProduct(dc, u);
+                    logAction(act);
+                }
+                case "remove product from cart" -> {
+                    removeProduct(dc, u);
+                    logAction(act);
+                }
+                case "view cart" -> {
+                    viewCart(dc, u);
+                    logAction(act);
+                }
+                case "send order" -> {
+                    sendOrder(dc, u); // send order doesn't really do anything except for send the order and save it for the respective delivery company
+                    logAction(act);
+                }
                 case "exit" -> flag = false;
                 default -> System.out.print("\nInvalid action! Please check spelling.\n");
             }
