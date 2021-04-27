@@ -24,3 +24,5 @@ Now we have new methods in the Service class that read data from files from .csv
 I also don't use the drivers for anything so far and I don't have a user data base with proper login / register. Probably will do it for Stage 3. I think I might leave drivers as an extra, although at first I thought they could be assigned to orders. I mean, they still can, but I might have to refactor some code, and that wasn't part of the task in stage 2, so it's fine.
 
 I hope reading from csv files and writing to a log is enough for this stage. I also could _write_ classes to csv files, but I don't see the need to in my project. There could be a use for adding new products I guess, but would be weird to add products in the menu as a _user_. The menu is for the _user_.
+
+Ah and I've created a class called Pair because the version of Java I used to run it doesn't have Pair. It's in the `utility` package.
