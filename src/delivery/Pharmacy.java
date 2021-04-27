@@ -5,6 +5,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.TreeSet;
+import java.util.Comparator;
+
+class DrugPrimaryUseComparator implements Comparator<Drug> {
+    public int compare(Drug first, Drug second) {
+        return first.compareTo(second);
+    }
+}
+
 
 public class Pharmacy extends Establishment {
     private ArrayList<Drug> availableProducts;
@@ -20,8 +28,10 @@ public class Pharmacy extends Establishment {
     }
 
     public void addProduct(Drug d) {
+        DrugPrimaryUseComparator comparator = new DrugPrimaryUseComparator();
         d.setProducer(this.getName());
         availableProducts.add(d);
+        availableProducts.sort(comparator);
     }
 
     public void removeProduct(Drug d) {
