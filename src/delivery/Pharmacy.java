@@ -2,14 +2,16 @@ package delivery;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.TreeSet;
 
 public class Pharmacy extends Establishment {
-    private TreeSet<Drug> availableProducts;
+    private ArrayList<Drug> availableProducts;
 
     public Pharmacy(String name, String address) {
         super(name, address);
-        availableProducts = new TreeSet<Drug>();
+        availableProducts = new ArrayList<>();
     }
 
     @Override
@@ -40,8 +42,7 @@ public class Pharmacy extends Establishment {
 
     @Override
     public String toString() {
-        return super.toString() + "Pharmacy{" +
-                "availableProducts=" + availableProducts +
-                '}';
+        return super.toString() +
+                "availableProducts=" + availableProducts + "\n";
     }
 }
