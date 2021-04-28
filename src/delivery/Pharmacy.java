@@ -2,9 +2,7 @@ package delivery;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.TreeSet;
 import java.util.Comparator;
 
 class DrugPrimaryUseComparator implements Comparator<Drug> {
@@ -15,11 +13,15 @@ class DrugPrimaryUseComparator implements Comparator<Drug> {
 
 
 public class Pharmacy extends Establishment {
-    private ArrayList<Drug> availableProducts;
+    private Drug[] availableProducts;
+    private int availableProductsSize;
 
     public Pharmacy(String name, String address) {
         super(name, address);
-        availableProducts = new ArrayList<>();
+        // this is for stage 1 purposes only
+        // we'll assume we can have a maximum of 100 drugs in the pharmacy
+        availableProducts = new Drug[100];
+        availableProductsSize = 0;
     }
 
     @Override
@@ -27,25 +29,63 @@ public class Pharmacy extends Establishment {
         return "Pharmacy";
     }
 
-    public void addProduct(Drug d) {
+    public void sortProducts() {
         DrugPrimaryUseComparator comparator = new DrugPrimaryUseComparator();
-        d.setProducer(this.getName());
-        availableProducts.add(d);
-        availableProducts.sort(comparator);
+        Drug[] slicedArray = Arrays.copyOfRange(availableProducts, 0, availableProductsSize);
+        Arrays.sort(slicedArray, comparator);
+        for (int i = 0; i < availableProductsSize; i++) {
+            availableProducts[i] = slicedArray[i];
+        }
+    }
+
+    public void addProduct(Drug d) {
+        try {
+            d.setProducer(this.getName());
+            availableProducts[availableProductsSize] = d;
+            availableProductsSize++;
+            // sorting
+            this.sortProducts();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void removeProduct(Drug d) {
-        availableProducts.remove(d);
+        try {
+            for (int i = 0; i < availableProductsSize; i++) {
+                if (availableProducts[i].getName().equals(d.getName())) {
+                    // deleting element found
+                    for (int j = i; j < availableProductsSize - 1; j++) {
+                        availableProducts[j] = availableProducts[j + 1];
+                    }
+                    availableProductsSize--;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void removeProduct(String drugName) {
-        availableProducts.removeIf(d -> d.getName().equals(drugName));
+        try {
+            for (int i = 0; i < availableProductsSize; i++) {
+                if (availableProducts[i].getName().equals(drugName)) {
+                    // deleting element found
+                    for (int j = i; j < availableProductsSize - 1; j++) {
+                        availableProducts[j] = availableProducts[j + 1];
+                    }
+                    availableProductsSize--;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public Drug getDrug(String drugName) {
-        for (Drug d : availableProducts) {
-            if (d.getName().toLowerCase().equals(drugName.toLowerCase()))
-                return d;
+        for (int i = 0; i < availableProductsSize; i++) {
+            if (availableProducts[i].getName().toLowerCase().equals(drugName.toLowerCase()))
+                return availableProducts[i];
         }
         return new Drug();
     }
@@ -53,8 +93,8 @@ public class Pharmacy extends Establishment {
     @Override
     public String toString() {
         String products = "";
-        for (Drug d : availableProducts) {
-            products += d.toString();
+        for (int i = 0; i < availableProductsSize; i++) {
+            products += availableProducts[i].toString();
         }
         return super.toString() +
                 "availableProducts= [\n" + products + "]\n";
