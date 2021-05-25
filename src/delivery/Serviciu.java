@@ -1,6 +1,7 @@
 package delivery;
 
 import utility.Pair;
+import utility.SQLdb;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -154,7 +155,7 @@ public class Serviciu {
         }
     }
 
-    // method used to populate delivery companies with drivers
+    // method used to populate the delivery company with drivers
     public static void populateWithDrivers(HashMap<String, DeliveryCompany> dc) {
 
         try {
@@ -190,6 +191,8 @@ public class Serviciu {
         System.out.print("Name: ");
         Scanner fin = new Scanner(System.in);
         u.setName(fin.nextLine());
+        System.out.print("Age: ");
+        u.setAge(Integer.parseInt(fin.nextLine()));
         System.out.print("Address: ");
         u.setAddress(fin.nextLine());
         System.out.print("Username: ");
@@ -206,10 +209,14 @@ public class Serviciu {
         System.out.print("Password: ");
         String pass = fin.nextLine();
         if (dc.userCredentialsCheck(username, pass)) {
-            System.out.print("User" + username + "signed in successfully\n");
-            u = dc.getUser(username);
-        }
-        else  {
+            System.out.print("User " + username + " signed in successfully\n");
+            User foundUser = dc.getUser(username);
+            u.setName(foundUser.getName());
+            u.setAge(foundUser.getAge());
+            u.setAddress(foundUser.getAddress());
+            u.setUsername(foundUser.getUsername());
+            u.setPassword(foundUser.getPassword());
+        } else {
             System.out.print("User not found, would you like to register? (y/n)\n");
             String ch = fin.next();
             if (ch.equals("y")) {

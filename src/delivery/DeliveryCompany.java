@@ -65,6 +65,18 @@ public class DeliveryCompany extends Establishment {
         return new User();
     }
 
+    public User getUser(int index) {
+        if (index >= userList.size()) {
+            System.out.print("Index out of bounds");
+            return null;
+        }
+        return userList.get(index);
+    }
+
+    public int getUserListSize() {
+        return userList.size();
+    }
+
     public Product getProduct(String productName) {
         // this is where I suffer again because my class structure sucks
         for (Establishment e : establishmentList) {
