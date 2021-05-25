@@ -26,3 +26,6 @@ I also don't use the drivers for anything so far and I don't have a user data ba
 I hope reading from csv files and writing to a log is enough for this stage. I also could _write_ classes to csv files, but I don't see the need to in my project. There could be a use for adding new products I guess, but would be weird to add products in the menu as a _user_. The menu is for the _user_.
 
 Ah and I've created a class called Pair because the version of Java I used to run it doesn't have Pair. It's in the `utility` package.
+
+## Stage 3
+I have finally made the sign in / register function to do something, taking userdata from a hosted database, to which I make a connection. Added SQLdb singleton java class, where database is accessed and modified. Database updates whenever a new user registers.
